@@ -30,4 +30,64 @@ namespace Lab6
             }
         }
     }
+
+    [TestClass]
+    public class PerconComparerTest
+    {
+        [TestMethod]
+        public void TestMethod1()
+        {
+            Person p1 = new Person("Lucio", 32);
+            Person p2 = new Person("Esmeralda", 45);
+            Person p3 = new Person("Micky", 74);
+
+            var list1 = (new List<Person> { p1, p2, p3 });
+            var list2 = (new List<Person> { p3, p2, p1 });
+
+            list1.Sort(new NameComparer());
+            list2.Sort(new AgeComparer());
+
+            var expected1 = new List<Person> { p1, p3, p2 };
+            var expected2 = new List<Person> { p1, p2, p3 };
+
+            foreach (var i in list1) Console.WriteLine(i.Name);
+            foreach (var i in list2) Console.WriteLine(i.Name);
+
+            CollectionAssert.AreEqual(expected1, list1);
+            CollectionAssert.AreEqual(expected2, list2);
+        }
+    }
+
+    [TestClass]
+    public class MyLinkedListTest
+    {
+        [TestMethod]
+        public void TestMethod1()
+        {
+            MyLinkedList<int> ints = new MyLinkedList<int>();
+
+            ints.Add(1);
+            ints.Add(2);
+            Assert.AreEqual(2, ints.Count);
+            ints.Add(1);
+            ints.Add(3);
+            Assert.AreEqual(4, ints.Count);
+
+            var expected = new List<int> { 1, 2, 1, 3 };
+            int i = 0;
+            foreach (var n in ints)
+            {
+                Console.WriteLine("{0}, {1}", expected[i], n);
+                Assert.AreEqual(expected[i++], n);
+            }
+
+            ints.Remove(1);
+            expected.Remove(1);
+            i = 0;
+            foreach (var n in ints)
+            {
+                Assert.AreEqual(expected[i++], n);
+            }
+        }
+    }
 }
