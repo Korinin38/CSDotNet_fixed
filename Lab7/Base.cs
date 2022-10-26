@@ -68,8 +68,27 @@ namespace Lab7
             var words = phrase.Split(" ");
             if (words.Any(w => w.Length > n))
                 return new string[0];
-            // var query = words.Aggregate();
-            return (new List<string> { "" }).ToArray();
+            List<string> buckets = new List<string>();
+            string accumulator = "";
+            foreach (var word in words)
+            {
+                if (word.Length == 0) // no empty words!
+                    continue;
+
+                if (accumulator.Length + word.Length + 1 > n)
+                {
+                    buckets.Add(accumulator);
+                    accumulator = word;
+                }
+                else
+                {
+                    if (accumulator.Length != 0)
+                        accumulator += ' ';
+                    accumulator += word;
+                }
+            }
+            buckets.Add(accumulator);
+            return buckets.ToArray();
         }
     }
 }

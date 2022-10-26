@@ -67,5 +67,28 @@ namespace Lab7
             Assert.IsTrue("СЛИШКОМ МНОГО ОВОЩЕЙ".Equals(n[1]));
             Assert.IsTrue("ПОСЛЕ ОБЕДА".Equals(n[2]));
         }
+        [TestMethod]
+        public void TestMethod5()
+        {
+            string[] examples = new string[4] { "она продает морские раковины у моря",
+                                               "мышь прыгнула через сыр",
+                                               "волшебная пыль покрыла воздух",
+                                               "a b c d e" };
+            int[] n = new int[4] { 16, 8, 15, 2 };
+
+            string[][] expected = new string[4][] { new string[] { "она продает", "морские раковины", "у моря" },
+                                                    new string[] { "мышь", "прыгнула", "через", "сыр" },
+                                                    new string[] { "волшебная пыль", "покрыла воздух" },
+                                                    new string[] { "a", "b", "c", "d", "e" }};
+
+            for (int i = 0; i < 4; ++i)
+            {
+                var res = LinqQueries.bucketize(examples[i], n[i]);
+                for (int j = 0; j < expected[i].Length; ++j)
+                {
+                    Assert.IsTrue(res[j].Equals(expected[i][j]));
+                }
+            }
     }
+}
 }
