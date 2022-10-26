@@ -16,7 +16,6 @@ namespace Lab7
         public string Name { get; set; }
     }
 
-
     public static class LinqQueries
     {
         public static string Query1(IEnumerable<ObjectWithName> list, Char delimeter)
@@ -52,6 +51,25 @@ namespace Lab7
                 }
                 Console.WriteLine("");
             }
+        }
+        public static List<string> Translator(Dictionary<string, string> dict, string phrase, int n)
+        {
+            List<string> query = phrase.Split(" ")
+                .Select((w, index) => new { Value = dict[w.ToUpper()], Group = index / n })
+                .GroupBy(p => p.Group)
+                .Select(g => g.Select(x => x.Value).ToList())
+                .Select(l => l.Aggregate((i, j) => i + " " + j))
+                .ToList();
+            return query;
+        }
+
+        public static string[] bucketize(string phrase, int n)
+        {
+            var words = phrase.Split(" ");
+            if (words.Any(w => w.Length > n))
+                return new string[0];
+            // var query = words.Aggregate();
+            return (new List<string> { "" }).ToArray();
         }
     }
 }

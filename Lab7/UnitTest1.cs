@@ -46,5 +46,26 @@ namespace Lab7
 
             LinqQueries.Query3(a);
         }
+        [TestMethod]
+        public void TestMethod4()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("AFTER", "оняке");
+            dict.Add("DOG", "янаюйю");
+            dict.Add("EATS", "еяр");
+            dict.Add("LUNCH", "наедю");
+            dict.Add("MUCH", "лмнцн");
+            dict.Add("THIS", "щрю");
+            dict.Add("TOO", "якхьйнл");
+            dict.Add("VEGETABLES", "нбныеи");
+            string a = "This dog eats too much vegetables after lunch";
+
+            List<string> n = LinqQueries.Translator(dict, a, 3);
+
+            Assert.AreEqual(3, n.Count);
+            Assert.IsTrue("щрю янаюйю еяр".Equals(n[0]));
+            Assert.IsTrue("якхьйнл лмнцн нбныеи".Equals(n[1]));
+            Assert.IsTrue("оняке наедю".Equals(n[2]));
+        }
     }
 }
