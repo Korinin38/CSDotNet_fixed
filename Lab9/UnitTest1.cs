@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Lab9
 {
@@ -35,5 +36,24 @@ namespace Lab9
             Assert.AreEqual(result.StudentsCount, 4);
             Assert.IsTrue(result.Students[2].LastName.Equals("Atkins"));
         }
+    }
+    [TestClass]
+    public class RationalTest
+    {
+        [TestMethod]
+        public void TestMethod1()
+        { Assert.IsTrue(RepeatingDecimal.Rational(2, 5).Equals("0.4")); }
+        [TestMethod]
+        public void TestMethod2() 
+        { Assert.IsTrue(RepeatingDecimal.Rational(1, 6).Equals("0.1(6)")); }
+        [TestMethod]
+        public void TestMethod3() 
+        { Assert.IsTrue(RepeatingDecimal.Rational(1, 3).Equals("0.(3)")); }
+        [TestMethod]
+        public void TestMethod4() 
+        { Assert.IsTrue(RepeatingDecimal.Rational(1, 7).Equals("0.(142857)")); }
+        [TestMethod]
+        public void TestMethod5() 
+        { Assert.IsTrue(RepeatingDecimal.Rational(1, 77).Equals("0.(012987)")); }
     }
 }
