@@ -1,9 +1,6 @@
-
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Lab12
 {
@@ -91,6 +88,7 @@ namespace Lab12
         {
             AddAllergy(fromString(s_allergen));
         }
+
         public void DeleteAllergy(Allergen allergen)
         {
             Score &= ~allergen;
