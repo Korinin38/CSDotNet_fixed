@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System;
 using System.Threading;
+using System.IO;
 
 namespace Lab14
 {
@@ -74,6 +74,85 @@ namespace Lab14
                 }
                 Console.WriteLine();
             }
+        }
+    }
+
+    [TestClass]
+    public class FileCalculatorTest
+    {
+        void GenerateFiles(string dir, bool with_random = false)
+        {
+            using (var sw = File.CreateText($"{dir}\\test1.txt"))
+            {
+                sw.WriteLine(1);
+                sw.WriteLine("{0} {1}", 0.1, 0.2);
+            }
+            using (var sw = File.CreateText($"{dir}\\test2.txt"))
+            {
+                sw.WriteLine(2);
+                sw.WriteLine("{0} {1}", 0.1, 0.2);
+            }
+            using (var sw = File.CreateText($"{dir}\\test3.txt"))
+            {
+                sw.WriteLine(3);
+                sw.WriteLine("{0} {1}", 0.1, 0.2);
+            }
+            if (!with_random)
+                return;
+
+            for (int i = 0; i < 100; ++i)
+            {
+                using (var sw = File.CreateText($"{dir}\\{i}.txt"))
+                {
+                    Random rnd = new Random();
+                    sw.WriteLine(rnd.Next(1, 3));
+                    sw.WriteLine("{0} {1}", rnd.NextDouble(), rnd.NextDouble());
+                }
+            }
+        }
+
+        [TestMethod]
+        public void CalculateFileTest()
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string testsDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName + "\\Test files";
+            if (!File.Exists($"{testsDirectory}\\test1.txt"))
+                GenerateFiles(testsDirectory);
+
+            float eps = 0.00001f;
+            Assert.IsTrue(Math.Abs(FileCalculator.CalculateFile($"{testsDirectory}\\test1.txt") - 0.3) < eps);
+            Assert.IsTrue(Math.Abs(FileCalculator.CalculateFile($"{testsDirectory}\\test2.txt") - 0.02) < eps);
+            Assert.IsTrue(Math.Abs(FileCalculator.CalculateFile($"{testsDirectory}\\test3.txt") - 0.05) < eps);
+        }
+        [TestMethod]
+        public void Calculate()
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string testsDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName + "\\Test files";
+            if (!File.Exists($"{testsDirectory}\\test1.txt"))
+                GenerateFiles(testsDirectory);
+            float res1 = FileCalculator.CalculateThreaded(1, testsDirectory);
+            float res2 = FileCalculator.CalculateThreaded(2, testsDirectory);
+            float res3 = FileCalculator.CalculateThreaded(3, testsDirectory);
+
+            float eps = 0.00001f;
+            Console.WriteLine($"{res1} {res2} {res3}");
+            Assert.IsTrue(Math.Abs(res1 - 0.37) < eps);
+            Assert.IsTrue(Math.Abs(res2 - 0.37) < eps);
+            Assert.IsTrue(Math.Abs(res3 - 0.37) < eps);
+        }
+        [TestMethod]
+        public void CalculateRandom()
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string testsDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName + "\\Test files";
+            if (!File.Exists($"{testsDirectory}\\0.txt"))
+                GenerateFiles(testsDirectory, true);
+            float res1 = FileCalculator.CalculateThreaded(1, testsDirectory);
+            float res10 = FileCalculator.CalculateThreaded(10, testsDirectory);
+            float eps = 0.00001f;
+            Console.WriteLine($"{res1} {res10}");
+            Assert.IsTrue(Math.Abs(res1 - res10) < eps);
         }
     }
 }
