@@ -204,4 +204,13 @@ namespace Lab15
                 thr.Join();
         }
     }
+    [TestClass]
+    public class BearTest
+    {
+        [TestMethod]
+        public void Test()
+        {
+            BearBees.BearAndBees(5, 10);
+        }
+    }
 }
