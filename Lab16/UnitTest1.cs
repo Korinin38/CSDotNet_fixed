@@ -7,7 +7,7 @@ using static System.Collections.Specialized.BitVector32;
 namespace Lab16
 {
     [TestClass]
-    public class UnitTest1
+    public class MultiThreadArrayTest
     {
         [TestMethod]
         public void TestMethod1()
@@ -53,6 +53,36 @@ namespace Lab16
                 t.Join();
             }
 
+        }
+    }
+    [TestClass]
+    public class OtherTest
+    {
+        [TestMethod]
+        public void TestMethod1()
+        {
+            int participantCount = 5;
+            CMyBarrier barrier = new CMyBarrier(participantCount);
+            Action<object> run = (object obj) => 
+            { 
+                int i = (int)obj;
+                Console.WriteLine($"Thread {i} started");
+                barrier.SignalAndWait(TimeSpan.FromMilliseconds(1000));
+                Console.WriteLine($"Thread {i} finished");
+            };
+
+            List<Thread> threads = new List<Thread>();
+            for (int i = 0; i < participantCount; ++i)
+            {
+                Thread thread = new Thread(new ParameterizedThreadStart(run));
+                threads.Add(thread);
+                thread.Start(i);
+            }
+
+            foreach(var t in threads)
+            {
+                t.Join();
+            }
         }
     }
 }
